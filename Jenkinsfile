@@ -4,11 +4,11 @@ pipeline {
     stage('DockerBuild') {
       steps {
         echo 'DockerBuild'
-        sh 'docker build -t new/new1 .'
-        sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 315837431010.dkr.ecr.ap-south-1.amazonaws.com'
+        sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/q3x4k3p7'
         sh 'docker build -t testjenkins .'
+        sh 'docker tag testjenkins:latest public.ecr.aws/q3x4k3p7/testjenkins:latest'
         sh 'docker tag testjenkins:latest 315837431010.dkr.ecr.ap-south-1.amazonaws.com/testjenkins:latest'
-        sh 'docker push 315837431010.dkr.ecr.ap-south-1.amazonaws.com/testjenkins:latest'
+        sh 'docker push public.ecr.aws/q3x4k3p7/testjenkins:latest'
       }
     }
 
