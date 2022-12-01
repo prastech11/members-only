@@ -21,8 +21,6 @@ pipeline {
       steps {
         sh 'sudo aws eks --region ap-south-1 describe-cluster --name Dev-Test --query cluster.status'
         sh 'sudo aws eks --region ap-south-1 update-kubeconfig --name Dev-Test'
-        readYaml(file: 'deployment.yaml')
-        readYaml(file: 'service.yaml')
         sh 'sudo kubectl apply -f deployment.yaml'
         sh 'sudo kubectl apply -f service.yaml'
       }
