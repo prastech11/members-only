@@ -27,5 +27,11 @@ pipeline {
       }
     }
 
+    stage('') {
+      steps {
+        readYaml(file: 'dep.yaml', text: 'apiVersion: apps/v1 kind: Deployment metadata:   name: from-jenkins   namespace: default spec:   replicas: 2   selector:     matchLabels:       app: web   template:     metadata:       labels:         app: web     spec:       containers:         - name: back-end           image: public.ecr.aws/q3x4k3p7/jenkins           ports:             - containerPort: 3000')
+      }
+    }
+
   }
 }
