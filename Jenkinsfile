@@ -17,5 +17,15 @@ pipeline {
       }
     }
 
+    stage('Deploy to K8s') {
+      steps {
+        sh 'aws eks --region ap-south-1 describe-cluster --name Dev-Test --query cluster.status'
+        sh '''
+aws eks --region ap-south-1 update-kubeconfig --name Dev-Test'''
+        sh 'kubectl apply -f deployment.yaml'
+        sh 'kubectl apply -f service.yaml'
+      }
+    }
+
   }
 }
