@@ -22,7 +22,7 @@ pipeline {
         sh 'aws eks --region ap-south-1 describe-cluster --name Dev-Test --query cluster.status'
         sh '''
 aws eks --region ap-south-1 update-kubeconfig --name Dev-Test'''
-        sh 'sudo kubectl -f deployment '
+        sh 'sudo kubectl -f deployment.yaml'
       }
     }
 
