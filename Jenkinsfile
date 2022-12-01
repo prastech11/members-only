@@ -22,7 +22,7 @@ pipeline {
         sh 'sudo aws eks --region ap-south-1 describe-cluster --name Dev-Test --query cluster.status'
         sh 'sudo aws eks --region ap-south-1 update-kubeconfig --name Dev-Test'
         writeYaml(data: 'apiVersion: apps/v1 kind: Deployment metadata:   name: from-jenkins   namespace: default spec:   replicas: 2   selector:     matchLabels:       app: web   template:     metadata:       labels:         app: web     spec:       containers:         - name: back-end           image: public.ecr.aws/q3x4k3p7/jenkins           ports:             - containerPort: 3000', file: 'deployment.yaml', overwrite: true)
-        sh 'sudo kubectl apply -f deployment.yaml'
+        sh 'sudo kubectl apply -f deployment.yaml --validate=false'
         sh 'sudo kubectl apply -f service.yaml'
       }
     }
