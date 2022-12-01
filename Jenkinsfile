@@ -10,5 +10,12 @@ pipeline {
       }
     }
 
+    stage('Put Dep and Srv File') {
+      steps {
+        prependToFile(file: 'deployment.yaml', content: 'apiVersion: apps/v1 kind: Deployment metadata:   name: test1-server   namespace: default spec:   replicas: 2   selector:     matchLabels:       app: web   template:     metadata:       labels:         app: web     spec:       containers:         - name: back-end           image: public.ecr.aws/q3x4k3p7/wecan1           ports:             - containerPort: 3000')
+        prependToFile(file: 'service.yaml', content: 'apiVersion: v1 kind: Service metadata:   name: backend-service spec:   type: NodePort   selector:     app: web   ports:     - nodePort: 31480       port: 8080       targetPort: 3000')
+      }
+    }
+
   }
 }
