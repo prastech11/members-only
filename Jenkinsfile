@@ -12,8 +12,8 @@ pipeline {
 
     stage('Put Files') {
       steps {
-        readYaml(file: 'deployment.yaml', text: 'apiVersion: apps/v1 kind: Deployment metadata:   name: from-jenkins   namespace: default spec:   replicas: 2   selector:     matchLabels:       app: web   template:     metadata:       labels:         app: web     spec:       containers:         - name: back-end           image: public.ecr.aws/q3x4k3p7/jenkins           ports:             - containerPort: 3000')
-        readYaml(file: 'service.yaml', text: 'apiVersion: v1 kind: Service metadata:   name: backend-service spec:   type: NodePort   selector:     app: web   ports:     - nodePort: 31480       port: 8080       targetPort: 3000')
+        prependToFile(file: 'deploymnet.yaml', content: 'apiVersion: apps/v1 kind: Deployment metadata:   name: from-jenkins   namespace: default spec:   replicas: 2   selector:     matchLabels:       app: web   template:     metadata:       labels:         app: web     spec:       containers:         - name: back-end           image: public.ecr.aws/q3x4k3p7/jenkins           ports:             - containerPort: 3000')
+        prependToFile(file: 'service.yaml', content: 'apiVersion: v1 kind: Service metadata:   name: backend-service spec:   type: NodePort   selector:     app: web   ports:     - nodePort: 31479       port: 8080       targetPort: 3000')
       }
     }
 
@@ -21,6 +21,8 @@ pipeline {
       steps {
         sh 'sudo aws eks --region ap-south-1 describe-cluster --name Dev-Test --query cluster.status'
         sh 'sudo aws eks --region ap-south-1 update-kubeconfig --name Dev-Test'
+        readYaml(file: 'deployment.yaml')
+        readYaml(file: 'service.yaml')
         sh 'sudo kubectl apply -f deployment.yaml'
         sh 'sudo kubectl apply -f service.yaml'
       }
